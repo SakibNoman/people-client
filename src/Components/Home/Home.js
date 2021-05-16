@@ -21,10 +21,14 @@ const Home = () => {
     }
 
     useEffect(() => {
-        fetch('http://localhost:5000/peoples')
+        fetch('http://localhost:5000/peoples', {
+            headers: {
+                "x-access-token": localStorage.getItem('token')
+            }
+        })
             .then(res => res.json())
             .then(data => setPeoples(data))
-    }, [peoples])
+    }, [])
 
     const handleDelete = (id) => {
         fetch(`http://localhost:5000/deletePeople/${id}`, {

@@ -19,11 +19,13 @@ const Login = () => {
             },
             body: JSON.stringify(data)
         })
-            .then(res => {
+            .then(res => res.json())
+            .then(data => {
                 setLoggedInUser({ email: 'aa' })
+                localStorage.setItem('token', data.token)
                 history.replace(from);
             })
-            .catch(err => console.log("fali"))
+            .catch(err => console.log("failed"))
     };
 
 
