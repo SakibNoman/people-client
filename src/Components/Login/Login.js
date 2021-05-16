@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useForm } from "react-hook-form";
-import { useHistory, useLocation } from "react-router";
+import { useHistory } from "react-router-dom";
 import { UserContext } from '../../App';
 
 const Login = () => {
@@ -8,12 +8,22 @@ const Login = () => {
     const [loggedInUser, setLoggedInUser] = useContext(UserContext);
 
     let history = useHistory();
-    let location = useLocation();
-    let { from } = location.state || { from: { pathname: "/home" } };
+    let { from } = { from: { pathname: "/home" } };
 
     const onSubmit = data => {
-        setLoggedInUser({ email: data.email })
-        history.replace(from);
+
+        fetch('http://localhost:5000/login', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => {
+                setLoggedInUser({ email: 'aa' })
+                history.replace(from);
+            })
+            .catch(err => console.log("fali"))
     };
 
 
