@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-import { UserContext } from '../../App';
+import { notifications, UserContext } from '../../App';
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [loggedInUser, setLoggedInUser] = useContext(UserContext);
-
+    sessionStorage.setItem('email', loggedInUser.email)
     let history = useHistory();
     let { from } = { from: { pathname: "/home" } };
 
@@ -21,13 +21,19 @@ const Login = () => {
         })
             .then(res => res.json())
             .then(data => {
-                setLoggedInUser({ email: 'aa' })
-                localStorage.setItem('token', data.token)
-                history.replace(from);
-            })
-            .catch(err => console.log("failed"))
-    };
+                if (data.auth) {
+                    notifications('Hou!', 'Login Success!', 'success', 200)
+                    setLoggedInUser({ auth: data.auth, email: data.email })
+                    localStorage.setItem('token', data.token)
+                    history.replace(from);
+                }
+                else {
+                    notifications('Oops!', 'Login failed!', 'danger', 1000)
+                }
 
+
+            })
+    };
 
     return (
         <div className="mt-5 mx-auto w-50 shadow p-3 rounded" >

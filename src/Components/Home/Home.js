@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Table, Tabs } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
+import { notifications } from '../../App';
 
 const Home = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -15,9 +16,8 @@ const Home = () => {
             },
             body: JSON.stringify(data)
         })
-            .then(res => {
-                alert("People added successfully")
-            })
+            .then(res => res.json())
+            .then(data => notifications('Wow!', 'Inserted Successfully', 'success', 500))
     }
 
     useEffect(() => {
@@ -28,15 +28,12 @@ const Home = () => {
         })
             .then(res => res.json())
             .then(data => setPeoples(data))
-    }, [])
+    }, [peoples])
 
     const handleDelete = (id) => {
         fetch(`http://localhost:5000/deletePeople/${id}`, {
             method: 'DELETE'
         })
-            .then(res => res.json())
-            .then(result => console.log(result))
-            .catch(err => console.log(err))
     }
 
     return (
