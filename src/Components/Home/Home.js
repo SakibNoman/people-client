@@ -1,31 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tab, Table, Tabs } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
 
-const people = [
-    {
-        username: 'sakibnoman',
-        mobile: '12342343',
-        email: 'alsdkf@g.com',
-        address: 'Chunati, lohagara,Chittagong'
-    },
-    {
-        username: 'sakibnoman',
-        mobile: '12342343',
-        email: 'alsdkf@g.com',
-        address: 'Chunati, lohagara,Chittagong'
-    },
-    {
-        username: 'sakibnoman',
-        mobile: '12342343',
-        email: 'alsdkf@g.com',
-        address: 'Chunati, lohagara,Chittagong'
-    }
-]
-
 const Home = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
+    const [peoples, setPeoples] = useState([])
+
+
+    const onSubmit = data => {
+        fetch('http://localhost:5000/addPeople', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => {
+                alert("People added successfully")
+            })
+    }
+
+    useEffect(() => {
+        fetch('http://localhost:5000/peoples')
+            .then(res => res.json())
+            .then(data => setPeoples(data))
+    }, [peoples])
+
+    const handleDelete = (id) => {
+        fetch(`http://localhost:5000/deletePeople/${id}`, {
+            method: 'DELETE'
+        })
+            .then(res => res.json())
+            .then(result => console.log(result))
+            .catch(err => console.log(err))
+    }
+
     return (
         <div className="mt-5 mx-auto w-50 shadow p-3 rounded" >
             <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
@@ -49,19 +58,10 @@ const Home = () => {
                 <Tab eventKey="profile" title="Peoples">
                     <Table>
                         <thead>
-                            <tr className="text-center" >
-                                <th>username</th>
-                                <th>email</th>
-                                <th>mobile</th>
-                                <th>address</th>
-                                <th>Action</th>
-                            </tr>
+                            <tr className="text-center" ><th>username</th><th>email</th><th>mobile</th><th>address</th><th>Action</th></tr>
                         </thead>
                         <tbody>
-                            {people.map(each => <tr> <td>{each.username}</td>
-                                <td>{each.email}</td>
-                                <td>{each.mobile}</td>
-                                <td>{each.address}</td> <td> <button className="btn btn-danger" >Delete</button> </td> </tr>)}
+                            {peoples.map(each => <tr key={each._id} ><td>{each.username}</td><td>{each.email}</td><td>{each.mobile}</td><td>{each.address}</td> <td> <button className="btn btn-danger" onClick={() => handleDelete(`${each._id}`)} >Delete</button></td></tr>)}
                         </tbody>
                     </Table>
                 </Tab>
