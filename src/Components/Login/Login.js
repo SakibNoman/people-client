@@ -6,7 +6,6 @@ import { notifications, UserContext } from '../../App';
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [loggedInUser, setLoggedInUser] = useContext(UserContext);
-    sessionStorage.setItem('email', loggedInUser.email)
     let history = useHistory();
     let { from } = { from: { pathname: "/home" } };
 
@@ -25,14 +24,17 @@ const Login = () => {
                     notifications('Hou!', 'Login Success!', 'success', 200)
                     setLoggedInUser({ auth: data.auth, email: data.email })
                     localStorage.setItem('token', data.token)
+                    sessionStorage.setItem('email', data.email)
                     history.replace(from);
                 }
                 else {
                     notifications('Oops!', 'Login failed!', 'danger', 1000)
+                    sessionStorage.setItem('email', '')
                 }
 
 
             })
+            .catch(err => sessionStorage.setItem('email', ''))
     };
 
     return (
