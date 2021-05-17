@@ -7,13 +7,12 @@ import { UserContext } from '../../App';
 const PrivateRoute = ({ children, ...rest }) => {
     const [loggedInUser] = useContext(UserContext)
 
-
     let sessionUser = false;
 
+    //checking validation of user to keep loggedIn
     if (sessionStorage.getItem('email').indexOf('@')) {
         sessionUser = true
     }
-
 
     return (
         <Route

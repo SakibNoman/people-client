@@ -4,13 +4,20 @@ import { useHistory } from "react-router-dom";
 import { notifications, UserContext } from '../../App';
 
 const Login = () => {
+
+    //useForm hook to handle form
     const { register, handleSubmit, formState: { errors } } = useForm();
+
+    //using context api
     const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+
+    //routing
     let history = useHistory();
     let { from } = { from: { pathname: "/home" } };
 
     const onSubmit = data => {
 
+        //fetch api to login user
         fetch('https://tranquil-tor-30729.herokuapp.com/login', {
             method: 'POST',
             headers: {

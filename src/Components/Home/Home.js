@@ -4,10 +4,14 @@ import { useForm } from "react-hook-form";
 import { notifications } from '../../App';
 
 const Home = () => {
+
+    //form handling hook
     const { register, handleSubmit, formState: { errors } } = useForm();
+
+    //state hook to store people data
     const [peoples, setPeoples] = useState([]) || []
 
-
+    //fetch api to add new people
     const onSubmit = data => {
         fetch('https://tranquil-tor-30729.herokuapp.com/addPeople', {
             method: 'POST',
@@ -21,6 +25,7 @@ const Home = () => {
             .then(data => notifications('Wow!', 'Inserted Successfully', 'success', 500))
     }
 
+    //useEffect hook and fetch api to find all peoples
     useEffect(() => {
         fetch('https://tranquil-tor-30729.herokuapp.com/peoples', {
             headers: {
@@ -29,7 +34,8 @@ const Home = () => {
         })
             .then(res => res.json())
             .then(data => setPeoples(data))
-    }, [peoples])
+    }, [peoples, setPeoples])
+
 
     const handleDelete = (id) => {
         fetch(`https://tranquil-tor-30729.herokuapp.com/deletePeople/${id}`, {
@@ -45,16 +51,27 @@ const Home = () => {
             <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
                 <Tab eventKey="home" title="Add People">
                     <form onSubmit={handleSubmit(onSubmit)}>
+
                         <input className="form-control mt-2" placeholder="username" {...register("username", { required: true, pattern: { value: /^[A-Za-z0-9]+$/i } })} />
+
                         {errors.username?.type === "required" && <span className="text-danger" >This field is required</span>}
+
                         {errors.username?.type === "pattern" && <span className="text-danger" >This field is not valid</span>}
+
                         <input className="form-control mt-3" placeholder="mobile no." {...register("mobile", { required: true, pattern: { value: /^\d{10}$/ } })} />
+
                         {errors.mobile?.type === "required" && <span className="text-danger" >This field is required</span>}
+
                         {errors.mobile?.type === "pattern" && <span className="text-danger" >This field is not valid</span>}
+
                         <input className="form-control mt-3" placeholder="email" {...register("email", { required: true, pattern: { value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ } })} />
+
                         {errors.email?.type === "required" && <span className="text-danger" >This field is required</span>}
+
                         {errors.email?.type === "pattern" && <span className="text-danger" >This field is not valid</span>}
+
                         <input className="form-control mt-3" placeholder="address" {...register("address", { required: true })} />
+
                         {errors.address && <span className="text-danger" >This field is required</span>}
 
                         <input className="form-control mt-3 btn-success" type="submit" value="Add" />
