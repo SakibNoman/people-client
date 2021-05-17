@@ -11,7 +11,7 @@ const Login = () => {
 
     const onSubmit = data => {
 
-        fetch('http://localhost:5000/login', {
+        fetch('https://tranquil-tor-30729.herokuapp.com/login', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

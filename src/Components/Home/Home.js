@@ -5,14 +5,15 @@ import { notifications } from '../../App';
 
 const Home = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [peoples, setPeoples] = useState([])
+    const [peoples, setPeoples] = useState([]) || []
 
 
     const onSubmit = data => {
-        fetch('http://localhost:5000/addPeople', {
+        fetch('https://tranquil-tor-30729.herokuapp.com/addPeople', {
             method: 'POST',
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                "x-access-token": localStorage.getItem('token')
             },
             body: JSON.stringify(data)
         })
@@ -21,7 +22,7 @@ const Home = () => {
     }
 
     useEffect(() => {
-        fetch('http://localhost:5000/peoples', {
+        fetch('https://tranquil-tor-30729.herokuapp.com/peoples', {
             headers: {
                 "x-access-token": localStorage.getItem('token')
             }
@@ -31,8 +32,11 @@ const Home = () => {
     }, [peoples])
 
     const handleDelete = (id) => {
-        fetch(`http://localhost:5000/deletePeople/${id}`, {
-            method: 'DELETE'
+        fetch(`https://tranquil-tor-30729.herokuapp.com/deletePeople/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "x-access-token": localStorage.getItem('token')
+            }
         })
     }
 
