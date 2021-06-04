@@ -47,9 +47,9 @@ const Login = () => {
     return (
         <div className="mt-5 mx-auto w-50 shadow p-3 rounded" >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <input className="form-control mt-3" type="email" placeholder="email" {...register("email", { required: true })} />
+                <input className="form-control mt-3" value="admin@namasys.co" type="email" placeholder="email" {...register("email", { required: true })} />
                 {errors.email && <span className="text-danger" >Email is required</span>}
-                <input className="form-control mt-3" type="password" placeholder="password" {...register("password", { required: true })} />
+                <input className="form-control mt-3" value="admin123" type="password" placeholder="password" {...register("password", { required: true })} />
                 {errors.password && <span className="text-danger" >Password is required</span>}
                 <input className="form-control mt-3 btn-success" type="submit" value="Login" />
             </form>
